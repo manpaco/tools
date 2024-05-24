@@ -1,4 +1,8 @@
 #!/bin/bash
+#
+# Battery check script.
+# Call me from 'cron' or sysmted timers (user).
+#
 
 # Environment variables used by notify-send and paplay
 export DISPLAY=:0
