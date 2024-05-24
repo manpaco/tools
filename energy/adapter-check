@@ -1,0 +1,35 @@
+#!/bin/bash
+#
+# Adapter check script.
+# When the battery is destroyed you may want to turn off the device when the
+# adapter is not connected (after a few minutes).
+# Call me from 'cron' or systemd timers.
+#
+
+ACC_CLASS="/sys/class/power_supply/AC0/online"
+acc_online="$(cat "$ACC_CLASS")"
+
+[[ $acc_online -eq 1 ]] && exit
+
+youruser="$1"
+fd_sounds="/home/$youruser/.local/share/sounds/freedesktop/stereo"
+
+# Necessary variables for aplay
+export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$(id -u "$youruser")/bus"
+export XDG_RUNTIME_DIR="/run/user/$(id -u "$youruser")"
+
+if [[ -e /tmp/noadap ]]; then
+    for rep in {0..2}; do
+        sleep "$rep"
+        aplay -D default -r 44100 "${fd_sounds}/suspend-error.raw"
+    done
+    sleep 30
+    acc_online="$(cat "$ACC_CLASS")"
+    [[ $acc_online -eq 1 ]] && exit
+    systemctl poweroff
+    exit
+fi
+
+touch /tmp/noadap
+
+aplay -D default -r 44100 "${fd_sounds}/suspend-error.raw"
