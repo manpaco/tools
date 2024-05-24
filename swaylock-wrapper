@@ -1,0 +1,14 @@
+#!/bin/bash
+#
+# Lock the screen and show "pixelated" effect on the background (static)
+# Call me from keymap, before system suspension, or system idle.
+#
+
+TMP_SHOT="/tmp/swaylockbg"
+
+grim "$TMP_SHOT"
+
+# Pixelated effect
+convert "$TMP_SHOT" -scale 10% -scale 1000% "$TMP_SHOT"
+
+swaylock -i "$TMP_SHOT"
