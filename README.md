@@ -13,5 +13,5 @@ If notifications are not shown, your system probably cannot startup the notifica
     # org.freedesktop.Notifications.service
     [D-BUS Service]
     Name=org.freedesktop.Notifications
-    Exec=/usr/lib/notification-daemon-1.0/notification-daemon
+    Exec=/path/to/your/notification-daemon
 
