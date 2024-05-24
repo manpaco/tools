@@ -1,0 +1,83 @@
+#!/bin/bash
+
+myname="$(basename "$0")"
+SCREENREC="wl-screenrec"
+SOUNDREC="pw-record"
+
+formated_date () {
+    date +%Y%m%d%H%M%S
+}
+
+stop_rec () {
+    killall "$1" && notify-send "$1 finished recording" && exit 0
+    exit 1
+}
+
+notify_start () {
+    notify-send -t "${2}000" "$1 starts recording in $2 seconds"
+    sleep "$2"
+}
+
+verify_instance () {
+    if pgrep "$1" || [[ $(pgrep -c "$myname") -ne 1 ]]; then
+        echo "Already recording ..." 1>&2
+        exit 1
+    fi
+}
+
+start_soundrec () {
+    verify_instance "$SOUNDREC"
+    MUSIC_DIR="${HOME}/Music"
+    FORMAT="ogg"
+    notify_start "$SOUNDREC" 5
+    nohup $SOUNDREC "${MUSIC_DIR}/${SOUNDREC}_$(formated_date).${FORMAT}" >/dev/null 2>&1 &
+}
+
+start_screenrec () {
+    verify_instance "$SCREENREC"
+    VIDEOS_DIR="${HOME}/Videos"
+    FORMAT="mp4"
+    notify_start "$SCREENREC" 5
+    nohup $SCREENREC -f "${VIDEOS_DIR}/${SCREENREC}_$(formated_date).${FORMAT}" >/dev/null 2>&1 &
+}
+
+[[ "$2" == "--toggle" || "$2" == "--start" || "$2" == "--stop" ]] &&
+    [[ "$1" == "sound" || "$1" == "screen" ]] ||
+    exit 1
+
+case "$1" in
+    "screen")
+        case "$2" in
+            "--toggle")
+                if pgrep "$SCREENREC"; then
+                    stop_rec "$SCREENREC"
+                else
+                    start_screenrec
+                fi
+                ;;
+            "--start")
+                start_screenrec
+                ;;
+            "--stop")
+                stop_rec "$SCREENREC"
+                ;;
+        esac
+        ;;
+    "sound")
+        case "$2" in
+            "--toggle")
+                if pgrep "$SOUNDREC"; then
+                    stop_rec "$SOUNDREC"
+                else
+                    start_soundrec
+                fi
+                ;;
+            "--start")
+                start_soundrec
+                ;;
+            "--stop")
+                stop_rec "$SOUNDREC"
+                ;;
+        esac
+        ;;
+esac
