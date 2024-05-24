@@ -3,6 +3,10 @@
 myname="$(basename "$0")"
 SCREENREC="wl-screenrec"
 SOUNDREC="pw-record"
+VIDEOS_DIR="${HOME}/Videos"
+AUDIO_DIR="${HOME}/Music"
+AUDIO_FORMAT="ogg"
+VIDEO_FORMAT="mp4"
 
 formated_date () {
     date +%Y%m%d%H%M%S
@@ -27,23 +31,22 @@ verify_instance () {
 
 start_soundrec () {
     verify_instance "$SOUNDREC"
-    MUSIC_DIR="${HOME}/Music"
-    FORMAT="ogg"
     notify_start "$SOUNDREC" 5
-    nohup $SOUNDREC "${MUSIC_DIR}/${SOUNDREC}_$(formated_date).${FORMAT}" >/dev/null 2>&1 &
+    nohup $SOUNDREC "${AUDIO_DIR}/${SOUNDREC}_$(formated_date).${AUDIO_FORMAT}" >/dev/null 2>&1 &
 }
 
 start_screenrec () {
     verify_instance "$SCREENREC"
-    VIDEOS_DIR="${HOME}/Videos"
-    FORMAT="mp4"
     notify_start "$SCREENREC" 5
-    nohup $SCREENREC -f "${VIDEOS_DIR}/${SCREENREC}_$(formated_date).${FORMAT}" >/dev/null 2>&1 &
+    nohup $SCREENREC -f "${VIDEOS_DIR}/${SCREENREC}_$(formated_date).${VIDEO_FORMAT}" >/dev/null 2>&1 &
 }
 
 [[ "$2" == "--toggle" || "$2" == "--start" || "$2" == "--stop" ]] &&
     [[ "$1" == "sound" || "$1" == "screen" ]] ||
     exit 1
+
+[[ -d "$VIDEOS_DIR" ]] || mkdir -p "$VIDEOS_DIR"
+[[ -d "$AUDIO_DIR" ]] || mkdir -p "AUDIO_DIR"
 
 case "$1" in
     "screen")
