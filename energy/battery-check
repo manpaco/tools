@@ -1,12 +1,19 @@
 #!/bin/bash
 
+# Environment variables used by notify-send and paplay
 export DISPLAY=:0
-export XAUTHORITY="/home/gabriel/.Xauthority"
+export XAUTHORITY="/home/gabriel/.Xauthority" # Only on X11
 export XDG_RUNTIME_DIR="/run/user/$(id -u)"
 export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$(id -u)/bus"
 
-acc_online="$(cat /sys/class/power_supply/AC0/online)"
-bat_charge="$(cat /sys/class/power_supply/BAT1/capacity)"
+# Device classes
+ACC_CLASS="/sys/class/power_supply/AC0/online"
+BAT_CLASS="/sys/class/power_supply/BAT1/capacity"
+
+# Status variables
+acc_online="$(cat "$ACC_CLASS")"
+bat_charge="$(cat "$BAT_CLASS")"
+# Sounds directory
 fd_sounds="/usr/share/sounds/freedesktop/stereo"
 
 [[ $acc_online -eq 1 ]] && exit
@@ -16,7 +23,7 @@ if [[ $bat_charge -le 20 ]]; then
         paplay "${fd_sounds}/suspend-error.oga" &
         notify-send "Very low battery level ($bat_charge%)" "Connect the carger..."
         sleep 60
-        acc_online="$(cat /sys/class/power_supply/AC0/online)"
+        acc_online="$(cat "$ACC_CLASS")"
         [[ $acc_online -eq 1 ]] && exit
         systemctl poweroff
     else
