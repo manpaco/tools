@@ -12,15 +12,15 @@ fd_sounds="/usr/share/sounds/freedesktop/stereo"
 [[ $acc_online -eq 1 ]] && exit
 
 if [[ $bat_charge -le 20 ]]; then
-	if [[ $bat_charge -le 10 ]]; then
-		paplay "${fd_sounds}/suspend-error.oga" &
-		notify-send "Very low battery level ($bat_charge%)" "Connect the carger..."
-		sleep 60
-		acc_online="$(cat /sys/class/power_supply/AC0/online)"
-		[[ $acc_online -eq 1 ]] && exit
-		systemctl poweroff
-	else
-		paplay "${fd_sounds}/message-new-instant.oga" &
-		notify-send "Low battery level ($bat_charge%)" "Connect the carger"
-	fi
+    if [[ $bat_charge -le 10 ]]; then
+        paplay "${fd_sounds}/suspend-error.oga" &
+        notify-send "Very low battery level ($bat_charge%)" "Connect the carger..."
+        sleep 60
+        acc_online="$(cat /sys/class/power_supply/AC0/online)"
+        [[ $acc_online -eq 1 ]] && exit
+        systemctl poweroff
+    else
+        paplay "${fd_sounds}/message-new-instant.oga" &
+        notify-send "Low battery level ($bat_charge%)" "Connect the carger"
+    fi
 fi
