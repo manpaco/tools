@@ -6,8 +6,8 @@ This scripts should be called from `cron` or systemd timers.
 
 Use this template as a starting point:
 
-    # /etc/systemd/system/script-runner.service or
-    # ~/.config/systemd/user/script-runner.service
+    # /etc/systemd/system/script-runner.timer or
+    # ~/.config/systemd/user/script-runner.timer
     [Unit]
     Description=Run 'script' every minute
     
@@ -54,4 +54,4 @@ If you have problems with computer shutdown when using `cron` (first make sure y
         }
     });
 
-The problem is caused because the cron service is not part of an active session and therefore has no privileges to suspend. With systemd you should have no problems
+The problem is caused because the cron service is not part of an active session and therefore has no privileges to shutdown. With systemd you should have no problems.
