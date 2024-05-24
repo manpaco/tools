@@ -46,7 +46,7 @@ start_screenrec () {
     exit 1
 
 [[ -d "$VIDEOS_DIR" ]] || mkdir -p "$VIDEOS_DIR"
-[[ -d "$AUDIO_DIR" ]] || mkdir -p "AUDIO_DIR"
+[[ -d "$AUDIO_DIR" ]] || mkdir -p "$AUDIO_DIR"
 
 case "$1" in
     "screen")
