@@ -4,10 +4,11 @@ This scripts should be called from `cron` or systemd timers.
 
 ## Systemd timers
 
+Place the files in `/etc/systemd/system` (system-wide) or `~/.config/systemd/user` (user instance).
+
 Use this template as a starting point:
 
-    # /etc/systemd/system/script-runner.timer or
-    # ~/.config/systemd/user/script-runner.timer
+    # script-runner.timer
     [Unit]
     Description=Run 'script' every minute
     
@@ -19,9 +20,8 @@ Use this template as a starting point:
 
 Also you need a service file (with the same name and '.service' extension):
 
-    # /etc/systemd/system/script-runner.service or
-    # ~/.config/systemd/user/script-runner.service
-    Unit]
+    # script-runner.service
+    [Unit]
     Description=Run 'script'
     
     [Service]
