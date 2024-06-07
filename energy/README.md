@@ -45,9 +45,8 @@ and use this as template:
 
 ## Troubleshooting
 
-If you have problems with computer shutdown when using `cron` (first make sure you have `polkit` installed and configured) use the following configuration file for your `polkit`:
+If you have problems with computer shutdown when using `cron` (first make sure you have `polkit` installed and configured) use the following configuration file for your `polkit` (/etc/polkit-1/rules.d/20-allow-power-off.rules):
 
-    # /etc/polkit-1/rules.d/20-allow-power-off.rules
     polkit.addRule(function(action, subject) {
         if(action.id == "org.freedesktop.login1.power-off" && subject.user == "<youruser>") {
             return polkit.Result.YES;
